@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>U.S. City Affordability Index | Expanded Economic Metrics</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #64748b;
+            --accent: #10b981;
+            --background: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section */
+        header {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: white;
+            padding: 100px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&q=80&w=1920') center/cover;
+            opacity: 0.15;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+
+        .hero-sub {
+            font-size: 1.25rem;
+            color: #cbd5e1;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            font-weight: 300;
+        }
+
+        /* Info Grid */
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: -50px;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Table Section */
+        .data-section {
+            padding: 80px 20px;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            overflow-x: auto;
+            margin-top: 40px;
+            border: 1px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            min-width: 800px;
+        }
+
+        thead {
+            background: #f1f5f9;
+        }
+
+        th {
+            padding: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            border-bottom: 2px solid var(--border);
+        }
+
+        td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.95rem;
+        }
+
+        tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .rank-badge {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            line-height: 32px;
+            text-align: center;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .score-val {
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        /* Search Filter */
+        .controls {
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        #citySearch {
+            padding: 12px 20px;
+            border-radius: 30px;
+            border: 2px solid var(--border);
+            width: 100%;
+            max-width: 400px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        #citySearch:focus {
+            border-color: var(--primary);
+        }
+
+        /* Footer */
+        footer {
+            background: #0f172a;
+            color: #94a3b8;
+            padding: 60px 20px;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        @media (max-width: 768px) {
+            .info-cards {
+                margin-top: 20px;
+            }
+            .controls {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <h1 class="animate">Affordability Reimagined</h1>
+            <p class="hero-sub animate" style="animation-delay: 0.1s;">A comprehensive analysis of 25 U.S. cities using expanded economic metrics to identify true livability.</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="info-cards">
+            <div class="card animate" style="animation-delay: 0.2s;">
+                <h3><span>📊</span> What We Did</h3>
+                <p>We analyzed 25 U.S. cities using a proprietary affordability score combining five core factors: median income, rent, home value, cost of living rank, and local unemployment rates.</p>
+            </div>
+            <div class="card animate" style="animation-delay: 0.3s;">
+                <h3><span>💡</span> Why It Matters</h3>
+                <p>Unlike traditional indices, we include <strong>unemployment</strong> — a key indicator of economic stress. This provides a holistic view of where Americans can find both affordability and stability.</p>
+            </div>
+            <div class="card animate" style="animation-delay: 0.4s;">
+                <h3><span>🔍</span> Independent Study</h3>
+                <p>Conducted by independent researchers using publicly available data, intended to support inclusive reporting on the real-world housing crisis in America.</p>
+            </div>
+        </div>
+
+        <section class="data-section">
+            <div class="controls">
+                <div>
+                    <h2 style="font-size: 2rem; margin-bottom: 5px;">City Rankings</h2>
+                    <p style="color: var(--text-muted);">Sort and search through the top 25 most affordable markets.</p>
+                </div>
+                <input type="text" id="citySearch" placeholder="Filter by city or state...">
+            </div>
+
+            <div class="table-container">
+                <table id="rankingTable">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>City</th>
+                            <th>Score</th>
+                            <th>Income</th>
+                            <th>Rent</th>
+                            <th>Home Value</th>
+                            <th>COL Rank</th>
+                            <th>Unemployment</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Data will be populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <span class="footer-logo">AINexForge</span>
+            <p>Providing deep data insights for the modern economic landscape.</p>
+            <p style="margin-top: 20px; font-size: 0.85rem;">© 2026 AINexForge. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const cityData = [
+            { rank: 1, city: "Eagle Pass, TX", score: -0.055, income: 52445, rent: 592, home: 161889, col: 5, une: "5.5%" },
+            { rank: 2, city: "Decatur, IL", score: -0.057, income: 49682, rent: 570, home: 89855, col: 17, une: "6.5%" },
+            { rank: 3, city: "Enid, OK", score: -0.057, income: 62361, rent: 647, home: 143305, col: 50, une: "5.9%" },
+            { rank: 4, city: "Katy, TX", score: -0.059, income: 124253, rent: 1196, home: 343597, col: 118, une: "4.3%" },
+            { rank: 5, city: "Springfield, IL", score: -0.068, income: 64709, rent: 711, home: 153738, col: 47, une: "5.8%" },
+            { rank: 6, city: "Mission, TX", score: -0.074, income: 60127, rent: 699, home: 165761, col: 7, une: "6.1%" },
+            { rank: 7, city: "League City, TX", score: -0.077, income: 120670, rent: 1231, home: 327511, col: 108, une: "4.5%" },
+            { rank: 8, city: "Midland, MI", score: -0.080, income: 75889, rent: 873, home: 194845, col: 72, une: "4.8%" },
+            { rank: 9, city: "Laredo, TX", score: -0.083, income: 63802, rent: 795, home: 174659, col: 12, une: "5.6%" },
+            { rank: 10, city: "Fort Smith, AR", score: -0.094, income: 53853, rent: 594, home: 176305, col: 11, une: "6.8%" },
+            { rank: 11, city: "Harlingen, TX", score: -0.096, income: 52137, rent: 719, home: 136388, col: 3, une: "6.0%" },
+            { rank: 12, city: "Wichita Falls, TX", score: -0.099, income: 58754, rent: 749, home: 148320, col: 15, une: "6.4%" },
+            { rank: 13, city: "Broken Arrow, OK", score: -0.101, income: 86442, rent: 1000, home: 233573, col: 68, une: "5.2%" },
+            { rank: 14, city: "Bay City, MI", score: -0.101, income: 47116, rent: 636, home: 90930, col: 15, une: "7.0%" },
+            { rank: 15, city: "Joplin, MO", score: -0.113, income: 52626, rent: 640, home: 154286, col: 32, une: "6.7%" },
+            { rank: 16, city: "Cedar Rapids, IA", score: -0.126, income: 70160, rent: 715, home: 174452, col: 167, une: "5.7%" },
+            { rank: 17, city: "Johnstown, PA", score: -0.129, income: 33906, rent: 444, home: 46678, col: 51, une: "8.2%" },
+            { rank: 18, city: "Battle Creek, MI", score: -0.133, income: 51991, rent: 703, home: 138764, col: 19, une: "7.2%" },
+            { rank: 19, city: "Anniston, AL", score: -0.133, income: 48809, rent: 513, home: 141900, col: 63, une: "7.9%" },
+            { rank: 20, city: "McAllen, TX", score: -0.133, income: 59255, rent: 783, home: 169631, col: 9, une: "7.1%" },
+            { rank: 21, city: "St. Joseph, MO", score: -0.133, income: 59100, rent: 633, home: 156229, col: 131, une: "6.3%" },
+            { rank: 22, city: "Dothan, AL", score: -0.139, income: 57430, rent: 624, home: 187797, col: 65, une: "7.3%" },
+            { rank: 23, city: "Weirton, WV", score: -0.139, income: 57282, rent: 528, home: 117561, col: 164, une: "7.5%" },
+            { rank: 24, city: "Florence, SC", score: -0.151, income: 60979, rent: 619, home: 186847, col: 144, une: "6.6%" },
+            { rank: 25, city: "Florissant, MO", score: -0.158, income: 69194, rent: 959, home: 149125, col: 56, une: "6.9%" }
+        ];
+
+        const tableBody = document.getElementById('tableBody');
+        const searchInput = document.getElementById('citySearch');
+
+        function formatCurrency(num) {
+            return '$' + num.toLocaleString();
+        }
+
+        function renderTable(data) {
+            tableBody.innerHTML = '';
+            data.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><span class="rank-badge">${item.rank}</span></td>
+                    <td><strong>${item.city}</strong></td>
+                    <td class="score-val">${item.score.toFixed(3)}</td>
+                    <td>${formatCurrency(item.income)}</td>
+                    <td>${formatCurrency(item.rent)}</td>
+                    <td>${formatCurrency(item.home)}</td>
+                    <td>#${item.col}</td>
+                    <td style="color: ${parseFloat(item.une) > 6.5 ? '#ef4444' : 'inherit'}">${item.une}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = cityData.filter(item => 
+                item.city.toLowerCase().includes(term)
+            );
+            renderTable(filtered);
+        });
+
+        // Initialize table
+        renderTable(cityData);
+
+        // Smooth scroll reveal observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.card, .table-container').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
